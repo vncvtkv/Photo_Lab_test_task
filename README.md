@@ -14,7 +14,7 @@
     python -m venv venv           
     source venv/bin/activate
     ```
-3.  **Установите необходимые зависимомти:**
+3.  **Установите необходимые зависимости:**
     ```bash
     pip install -r requirements.txt  
     ```
@@ -36,11 +36,9 @@
 Найти **ТОП-5** шаблонов, которые пользователи применяют **≥2 раза подряд в одной сессии.**
 
 **Решение**:
-- [Папка с SQL-скриптами(инициализация бд и запрос) и Python-скриптом для запуска SQL с помощью SQLite](https://github.com/vncvtkv/Photo_Lab_test_task/blob/main/task_1/)
-
 - [SQL-запрос для решения первой задачи](https://github.com/vncvtkv/Photo_Lab_test_task/blob/main/task_1/queries.sql)
 
-## Задача 2: анализ повторяющихся шаблонов в пользовательских сессиях
+## Задача 2: анализ позиций приложений
 
 **Требуется**:
 Написать Python-скрипт, который для заданного Apple ID приложения:
@@ -56,4 +54,4 @@
 - `date` (дата запуска скрипта)
 
 **Решение**:
-- [Python-скрипт для решения второй задачи](https://github.com/vncvtkv/Photo_Lab_test_task/blob/dev/task_2/photo_task2.py)
+- [Python-скрипт для решения второй задачи](https://github.com/vncvtkv/Photo_Lab_test_task/blob/main/task_2/photo_task2.py)

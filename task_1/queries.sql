@@ -23,18 +23,7 @@ sessions AS (
   FROM sessions_0
 ),
 
--- 2. Выбираем только события выбора шаблона
-template_events AS (
-    SELECT 
-    user_id,
-    time,
-    value,
-    session_id
-  FROM sessions
-  WHERE event = 'template_selected'
-),
-
--- 3. Находим повторы шаблонов в сессиях
+-- 2. Выбираем только события выбора шаблона и находим повторы шаблонов в сессиях
 repeats AS (
   SELECT 
     user_id,
@@ -43,10 +32,11 @@ repeats AS (
     -- Если шаблон совпадает с предыдущим — это повтор
     CASE WHEN value = LAG(value) OVER (PARTITION BY user_id, session_id ORDER BY time) 
         THEN 1 ELSE 0 END AS is_repeat
-  FROM template_events
+  FROM sessions
+  WHERE event = 'template_selected'
 ),
 
--- 4. Считаем количество сессий с повторениями для каждого шаблона
+-- 3. Считаем количество сессий с повторениями для каждого шаблона
 repeat_counts AS (
   SELECT 
     value,
@@ -56,7 +46,7 @@ repeat_counts AS (
   GROUP BY value
 ),
 
--- 5. Считаем топ шаблонов  
+-- 4. Считаем топ шаблонов  
 template_stats AS (
   SELECT
     value,
@@ -72,3 +62,4 @@ SELECT
 FROM template_stats
 WHERE rk <= 5
 ORDER BY rk;
+

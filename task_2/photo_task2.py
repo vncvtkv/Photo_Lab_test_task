@@ -14,8 +14,7 @@ def create_database():
             id INTEGER,
             word TEXT,
             pos INTEGER,
-            date TEXT,
-            PRIMARY KEY (id, word, date)
+            date TEXT
         )
     ''')
     conn.commit()
@@ -60,26 +59,24 @@ def analyze_app(app_id):
     """Основная функция анализа"""
     conn = sqlite3.connect('itunes.db')
     cursor = conn.cursor()
-    
+
     try:
         # Получаем информацию о приложении
         app_info = get_app_info(app_id)
         app_name = app_info['trackName']
         words = app_name.split()
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        
+
         print(f"Analyzing app: {app_name} (ID: {app_id})")
         print(f"Found {len(words)} words in title")
-        
+
         # Для каждого слова в названии
         for word in words:
             clean_word = word.strip().lower()
-            if len(clean_word) < 3:  # Пропускаем короткие слова
-                continue
-                
+   
             print(f"Searching for word: {clean_word}...")
             position = search_app_position(app_name, clean_word)
-            
+
             if position is not None:
                 print(f"Found at position: {position}")
                 # Записываем в базу данных
@@ -88,13 +85,16 @@ def analyze_app(app_id):
                     (app_id, clean_word, position, current_date)
                 )
             else:
-                print(f"App not found in top 200 for word: {clean_word}")
-            
+                cursor.execute(
+                    "INSERT INTO itunes (id, word, pos, date) VALUES (?, ?, ?, ?)",
+                    (app_id, clean_word, None, current_date)
+                )
+
             time.sleep(1)  # Задержка между запросами
-            
+
         conn.commit()
         print("Analysis completed successfully!")
-        
+
     except Exception as e:
         print(f"Error: {str(e)}")
     finally:
